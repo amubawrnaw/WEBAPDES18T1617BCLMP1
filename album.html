@@ -1,0 +1,296 @@
+<html>
+    <style>
+        
+        body {
+            background: radial-gradient(#F1F9FF,#D0E8DE);
+        }
+        .mainDiv{
+            font-family: 'Raleway', sans-serif;
+            display:flex;
+            flex-direction: column;
+            height:95%;
+            width:95%;
+            margin:5px;
+            background: radial-gradient(#F1F9FF,#D0E8DE);
+            padding: 10px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            
+        }
+        .container{
+            height:auto;
+            width:auto;
+            background: linear-gradient(#FBFCE8,#FAEBD7);
+            margin-top: 10px;
+            padding:10px;
+            flex-shrink: 0;
+            border-radius: 15px;
+        }
+        .innerDiv{
+            display:flex;
+            flex-direction: column;
+            border-radius: 40px 10px 40px 10px;
+            flex:auto;
+            background: radial-gradient(to left,#ffe4c4,#FFF5D5);
+            height:auto;
+            flex-shrink: 0;
+            padding-left: 20px;
+            padding-top: 20px;
+            margin: 5px;
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.24), 0 11px 30px 0 rgba(0,0,0,0.19);
+        }
+        .thumbnailContainer{
+            width:auto;
+            height: auto;
+        }
+        .thumbnail{
+            cursor: pointer;
+        }
+        
+        .thumbnail:hover{
+            box-shadow: 0 6px 8px 0 rgba(0,0,0,0.24), 0 11px 30px 0 rgba(0,0,0,0.19);
+        }
+        .url{
+            visibility: hidden;
+        }
+        .id{
+            visibility: hidden;
+        }
+        
+        
+        .photoContainer{
+            display:flex;
+            flex-direction: column;
+            flex:auto;
+            width: 650px;
+            background:radial-gradient(#F0FFFF,#E0EEEE);
+            height:auto;
+            flex-shrink: 0;
+            padding: 15px;
+            margin: 5px;
+            border-radius: 10px;
+        }
+        .userName{
+            margin-top: 15px;
+            color:blue;
+            cursor: pointer;
+        }
+        .username:hover{
+            text-decoration: underline;
+            color:#4444FF;
+        }
+        .fullImageContainer{
+            width:auto;
+            height: auto;
+        }
+        .fullImage{
+            
+        }
+        .title{
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+     .superDiv {
+            display: flex;
+            width: 100%;
+        }
+  .ulo {
+      
+  position: relative;
+  width: 30%;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.patong {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 100%;
+  background-color: #D0E8DE;
+  overflow: hidden;
+  width: 0;
+  height: 100%;
+  transition: .5s ease;
+}
+
+.ulo:hover .patong {
+  width: 100%;
+  right: 0;
+}
+
+.text {
+  white-space: nowrap; 
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  overflow: hidden;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+        
+    
+    
+    </style>
+    
+    
+    
+    <link rel="stylesheet" href="css.css">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js" ></script>
+    <script>
+        var albumId = -1;
+        var albumTitle = "";
+        var userId;
+        
+        
+        
+        var root = "https://jsonplaceholder.typicode.com";
+        var query = window.location.search.substring(1);
+        
+        albumId = query.split("?")[0];
+        albumId = albumId.split("=")[1];
+        
+        $.get(root + "/albums?id="+albumId, setUserId);
+        
+        albumTitle = query.split("?")[1];
+        albumTitle = albumTitle.split("=")[1];
+        
+        albumTitle = decodeURI(albumTitle);
+    
+        $(document).ready(function(){
+
+            $.get(root + "/photos?albumId=" + albumId, function(obj){
+                
+                for(var i = obj.length - 1 ; i >=0 ; i--){
+                    var jason = obj[i];
+                    
+                    var newImage = $("<div>");
+                    newImage.addClass("innerDiv");
+                    
+                    var thumbnail = $("<div>");
+                    thumbnail.addClass("thumbnailContainer");
+                    
+                    var url = $("<div>");
+                    url.addClass("url");
+                    
+                    var id = $("<div>");
+                    id.addClass("id");
+                    
+                    thumbnail.append($("<img src = '" + jason.thumbnailUrl + "' class = 'thumbnail'>"));
+                    
+                    url.html(jason.url);
+                    
+                    id.html(jason.id);
+                    
+                    
+                    newImage.append(thumbnail);
+                    newImage.append(url);
+                    newImage.append(id);
+                    
+                    $(".container").append(newImage);
+                }
+            });
+        });
+        
+        
+        $(document).on('click', '.thumbnail', function(){
+            var imgId = $(this).parent().parent().find(".id").text();
+            var $parent = $(this).parent().parent();
+            
+            //if full image not yet shown, show it
+            if($parent.children().length == 3){
+                addPhoto($parent, imgId);
+            }else{//else, hide the image
+                $parent.children().last().remove();
+            }
+            
+        });
+        
+        $(document).on('click', '.userName', function(){
+            window.open("profile.html?userId=" + userId);
+        });
+        
+        function setUserId(obj){
+            userId = obj[0].userId;
+            console.log(userId);
+        }
+        
+        //stolened've from posts.html
+        function getUser(id, obj2){
+            $.get("https://jsonplaceholder.typicode.com/users?id="+id, function(obj){
+                obj2.html(obj[0].name);
+            });
+        }
+        
+        function addPhoto($parent, id){
+            $.get(root + "/photos?id=" + id, function(obj){
+                var jason = obj[0];
+                
+                var newImage = $("<div>");
+                newImage.addClass("photoContainer");
+                
+                var username = $("<div>");
+                username.addClass("userName");
+                
+                var container = $("<div>");
+                container.addClass("fullImageContainer");
+                
+                var title = $("<div>");
+                title.addClass("title");
+                
+                container.append($("<img src = '" + jason.url + "' class = 'fullImage'>"));
+                
+                title.html(jason.title);
+                getUser(userId, username);
+                
+                newImage.append(title);
+                newImage.append(container);
+                newImage.append(username);
+                
+                $parent.append(newImage);
+            });
+        }
+    </script>
+    
+    <head>
+    
+    
+    </head>
+    
+    <body>
+     <div class="superDiv">
+  
+    
+    <div class="ulo">
+      <a href="main.html">
+        <img src="warudo.png" class = "image" alt="avatar">
+        
+       
+    <div class="patong">
+        <img class="text" src="home.png" width="80%">
+
+    </div>
+          </a>
+        </div>
+         
+        <img src="album.png" height="60px" style="position:absolute; margin-left:70%; margin-top: 15;">
+        </div>
+    <div class = "mainDiv">
+        <div class = "container">
+        
+        </div>
+        
+    </div>
+    
+    </body>
+    
+    
+    
+</html>

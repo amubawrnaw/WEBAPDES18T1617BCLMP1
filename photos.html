@@ -1,0 +1,398 @@
+<html>
+     <link rel="stylesheet" href="css.css">
+    <style>
+        body{
+            background: radial-gradient(#F1F9FF,#D0E8DE);
+        }
+        .bigDiv{
+            font-family: 'Raleway', sans-serif;
+            display:flex;
+            flex-direction: column;
+            height:95%;
+            width:95%;
+            margin:5px;
+            background: radial-gradient(#F1F9FF,#D0E8DE);
+            padding: 10px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            
+        }
+        .mainDiv{
+            display:flex;
+            flex-direction: column;
+            height:100%;
+            width:100%;
+            margin:5px;
+            
+        }
+        .innerDiv{
+            display:flex;
+            flex-direction: column;
+            border-radius: 40px 10px 40px 10px;
+            flex:auto;
+            background: radial-gradient(to left,#ffe4c4,#FFF5D5);
+            height:auto;
+            flex-shrink: 0;
+            padding-left: 20px;
+            padding-top: 20px;
+            margin: 5px;
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.24), 0 11px 30px 0 rgba(0,0,0,0.19);
+        }
+        .thumbnailContainer{
+            margin: 5px;
+        }
+        .thumbnail{
+            cursor: pointer;
+        }
+        .thumbnail:hover{
+
+            box-shadow: 0 6px 8px 0 rgba(0,0,0,0.24), 0 11px 30px 0 rgba(0,0,0,0.19);
+        }
+        .innerContainer{
+            display:flex;
+            flex-direction: column;
+            flex:auto;
+            background: linear-gradient(#EFC998,#deb887);
+            width: 650px;;
+            height:auto;
+            flex-shrink: 0;
+            padding: 15px;
+            margin: 5px;
+            border-radius: 10px;
+            
+        }
+        .title{
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .username,.albumName{
+            color:blue;
+            cursor: pointer;
+        }
+        .albumName:hover,.username:hover{
+                        text-decoration: underline;
+            color:#4444FF;
+        }
+        .albumId{
+            visibility: hidden;
+        }
+        .userId{
+            visibility: hidden;
+        }
+        .imageContainer{
+            display:flex;
+            flex-direction: row;
+        }
+        .image{
+            
+        }
+        .titleContainer{
+            display:flex;
+            flex-direction: row;
+        }
+        .nameContainer{
+            flex-direction: row;
+        }
+        .albumContainer{
+            flex-direction: row;
+        }
+        .imageId{
+            visibility: hidden;
+            margin-top: 5px;
+        }
+        
+         #morePhotos, .buttons{
+            position: none;
+            cursor: pointer;
+            position: right;
+             float: left;
+            background-color: #4C7D55;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            padding: 8px 16px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 12px;
+            top:40%;
+            left:40%;
+            margin-right: 15px;
+            text-align: center;
+            display: inline-block;
+            font-weight: bold;
+            transition-duration: 0.3s;
+        }
+
+
+        #morePhotos:hover, .buttons:hover{
+            background-color: #5D8E66;
+            box-shadow: 0 6px 8px 0 rgba(0,0,0,0.24), 0 11px 30px 0 rgba(0,0,0,0.19);
+
+        }
+    
+         .superDiv {
+            display: flex;
+            width: 100%;
+        }
+  .ulo {
+      
+  position: relative;
+  width: 30%;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.patong {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 100%;
+  background-color: #D0E8DE;
+  overflow: hidden;
+  width: 0;
+  height: 100%;
+  transition: .5s ease;
+}
+
+.ulo:hover .patong {
+  width: 100%;
+  right: 0;
+}
+
+.text {
+  white-space: nowrap; 
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  overflow: hidden;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+    </style>
+    
+   
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js" ></script>
+    <script>
+        var root = "https://jsonplaceholder.typicode.com";
+        var page = 0;
+        
+        $.get(root + "/photos",function(obj){
+            page = obj.length -1;
+            console.log("page set to obj length: " + page);
+        });
+        
+        $(document).ready(function(){
+            $.get(root + "/photos", function(obj){
+               addPosts(obj, 10);
+            });
+            
+            
+            $("#morePhotos").click(function(){
+                $.get(root + "/photos",function(obj){
+                    addPosts(obj, 10);
+                    console.log("pres");
+                });
+            });
+        });
+        
+        $(document).on('click', '.thumbnail', function(){
+            var $parent = $(this).parent().parent();
+            var imageId = $parent.children().children().last().text();
+            //if full image not yet shown, show it
+            if($parent.children().length == 1){
+                
+               showImage($parent,imageId);
+            }else{//else, hide the image
+                $parent.children().last().remove();
+            }
+        });
+        
+        $(document).on('click', '.username', function(){
+            var userId = $(this).parent().children().last().text();
+            window.open("profile.html?userId=" + userId);
+        });
+        
+        $(document).on('click', '.albumName', function(){
+            var albumId = $(this).parent().children().last().text();
+            var title = $(this).text;
+            window.open("album.html?id=" + albumId + "?name=" + title);
+        });
+        
+        function getAlbumName(albumId, name){
+            $.get(root + "/albums?id=" + albumId, function(obj){
+                name.html(obj[0].title);
+            });
+        }
+        
+        function getUser(val, userId, fn){
+            $.get(root + "/users?id=" + userId, function(obj){
+                fn(val, obj[0]);
+            });
+        }
+        
+        function getAlbum(val, albumId, fn){
+            $.get(root + "/albums?id=" + albumId, function(obj){
+                fn(val, obj[0]);
+            });
+        }
+        
+        function showImage($parent, imageId){
+            $.get(root + "/photos?id="+imageId, function(obj){
+                var jason = obj[0];//JSON object of the image
+                
+                var innerContainer = $("<div>");
+                innerContainer.addClass("innerContainer");
+                
+                var titleContainer = $("<div>");
+                titleContainer.addClass("titleContainer");
+                
+                var nameContainer = $("<div>");
+                nameContainer.addClass("nameContainer");
+                
+                var albumContainer = $("<div>");
+                albumContainer.addClass("albumContainer");
+                
+                var imageContainer = $("<div>");
+                imageContainer.addClass("imageContainer");
+                
+                var albumName = $("<div>");
+                albumName.addClass("albumName");
+                
+                var username = $("<div>");
+                username.addClass("username");
+                
+                var title = $("<div>");
+                title.addClass("title");
+                
+                var albumId = $("<div>");
+                albumId.addClass("albumId");
+                
+                var userId = $("<div>");
+                userId.addClass("userId");
+                
+                
+                title.html(jason.title);
+                
+                
+                getAlbumName(jason.albumId, albumName);
+                
+                
+                albumId.html(jason.albumId);
+                
+                //add username
+                getAlbum(username, jason.albumId, function(userId, obj){
+                    getUser(userId, obj.userId, function(userId, obj2){
+                       userId.html(obj2.name); 
+                    });
+                });
+                
+                //add userId
+                getAlbum(userId, jason.albumId, function(userId, obj){
+                   userId.html(obj.userId); 
+                });
+                
+                
+                imageContainer.append($("<img src = '" + jason.url + "' class = 'image'>"));
+                
+                
+                titleContainer.append(title);
+                
+                albumContainer.append($("<div>From: </div"));
+                albumContainer.append(albumName);
+                albumContainer.append(albumId);
+                
+                nameContainer.append($("<div>By: </div"));
+                nameContainer.append(username);
+                nameContainer.append(userId);
+                
+                
+                innerContainer.append(titleContainer);
+                innerContainer.append(albumContainer);
+                innerContainer.append(nameContainer);
+                innerContainer.append(imageContainer);
+                
+                $parent.append(innerContainer);
+                
+            });
+        }
+        
+        
+        function addPosts(obj, count){
+            var morePhotos = false;
+            for(var i = page;i > page - count && i >= 0 ; i--){
+                
+                var jason = obj[i];
+                morePhotos = true;
+                
+                var inner = $("<div>");
+                inner.addClass("innerDiv");
+                
+                var thumb = $("<div>");
+                thumb.addClass("thumbnailContainer");
+                
+                var imgId = $("<div>");
+                imgId.addClass("imageId");
+                
+                
+                imgId.html(jason.id);
+                
+                thumb.append("<img src = '" + jason.thumbnailUrl + "' class = 'thumbnail'>");
+                thumb.append(imgId);
+                
+                inner.append(thumb);
+                
+                $(".bigDiv").append(inner);
+            }
+            if(!morePhotos){
+                alert("No more photos to show!");
+            }
+            page-=count;
+        }
+        
+        
+    </script>
+    
+    <head>
+    
+    
+    </head>
+    
+    <body>
+        <div class="superDiv">
+  
+    
+    <div class="ulo">
+      <a href="main.html">
+        <img src="warudo.png" class = "image" alt="avatar">
+        
+       
+    <div class="patong">
+        <img class="text" src="home.png" width="80%">
+
+    </div>
+          </a>
+        </div>
+         
+        <img src="pics.png" height="60px" style="position:absolute; margin-left:73%; margin-top: 15;">
+        </div>
+    <div class = "mainDiv">
+        <div class = "mainDiv">
+            <div class = "bigDiv">
+            
+            </div>
+            <div>
+   
+                <button id = "morePhotos">Load more photos</button>
+            </div>
+        </div>
+    
+    </body>
+    
+    
+    
+</html>

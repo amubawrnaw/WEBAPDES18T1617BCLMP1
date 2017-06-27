@@ -1,0 +1,71 @@
+<html>
+    <style>
+        .top{
+            display:flex;
+            flex-direction: row;
+        }
+    
+    
+    </style>
+    <head>
+    <script
+    src="http://code.jquery.com/jquery-3.2.1.js"
+    integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+    crossorigin="anonymous"></script>
+    
+    <script>
+        
+        $(document).ready(function(){
+            $("#Posts").click(function(){
+                $.get("https://jsonplaceholder.typicode.com/posts", function(obj){
+                   console.log(obj); 
+                });
+            });
+            
+            $("#Profile").click(function(){
+                $.get("https://jsonplaceholder.typicode.com/users", function(obj){
+                   console.log(obj); 
+                });
+            });
+            
+            $("#Photos").click(function(){
+                $.get("https://jsonplaceholder.typicode.com/photos", function(obj){
+                   console.log(obj); 
+                });
+            });
+            
+            $("#Album").click(function(){
+                $.get("https://jsonplaceholder.typicode.com/albums", function(obj){
+                   console.log(obj); 
+                });
+            });
+            
+            
+            
+        });
+        
+        
+    </script>
+    </head>
+
+    
+    <body>
+        <div class = "top">
+        <button id = "Posts">Posts</button>
+            <button id = "Profile">Profile</button>
+            <button id = "Photos">Photos</button>
+            <button id = "Album">Album</button>
+        </div>
+        
+        
+        <div class = "mainDiv">
+            
+
+
+        </div>
+
+    
+    </body>
+
+
+</html>

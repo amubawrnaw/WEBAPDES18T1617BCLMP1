@@ -1,0 +1,35 @@
+Posts:
+-body
+-id
+-title
+-userId
+
+User:
+-address
+	-city
+	-Geo(obj)
+	-street
+	-suite
+	-zipcode
+-company
+	-bs
+	-catchPhrase
+	-name
+-email
+-id
+-name
+-phone
+-username
+-website
+
+Photos:
+-albumId
+-id
+-thumbnailUrl
+-url
+
+Album:
+-id
+-title
+-userId
+	

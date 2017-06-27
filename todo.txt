@@ -1,0 +1,29 @@
+1366x768
+***POST***
+[/]Title
+[/]Content
+[/]Username of user
+	[/]onclick bring to profile page of the use
+
+***PROFILE***
+[/]all data except geoloc / lat / lnt
+[/]preview of photos, posts
+[/]option to view all photo's/posts
+
+***PHOTOS***
+[/]show thumbnails (9-15)
+[/]load more option
+[/]view full photo + info
+	[/]title
+	[/]uploader
+	[/]album (title not id)
+	[/]onclick of album / user will bring to their page
+
+***ALBUM***
+[/]all photos shown in thumbnail
+	[/]onclick will give more info
+
+***GENERAL***
+[]Good UI
+[]ez to use
+[]a e s t h e t i c

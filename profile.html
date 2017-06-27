@@ -1,0 +1,420 @@
+<html>
+<!--    <link rel="stylesheet" href="css.css">-->
+    <style>
+        body{
+            background: radial-gradient(#F1F9FF,#D0E8DE);
+        }
+        .mainDiv{
+            font-family: 'Raleway', sans-serif;
+            display:flex;
+            flex-direction: column;
+            height:95%;
+            width:95%;
+            margin:5px;
+            
+            padding: 10px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            padding:10px;
+        }
+        
+        #head{
+
+            text-shadow: 2px 2px #888888;
+           
+        }
+        .profile{
+            display:flex;
+            flex-direction: column;
+            height:auto;
+            width:auto;
+            background: linear-gradient(#FBFCE8,#FAEBD7);
+            margin-top: 10px;
+            flex-shrink: 0;
+            padding:15px;
+            padding-left: 20px;
+            border-radius: 15px 15px 45px 45px;
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24), 0 5px 12px 0 rgba(0,0,0,0.19);
+        }
+        .posts{
+            height:auto;
+            width:auto;
+            background: linear-gradient(#FBFCE8,#FAEBD7);
+            margin-top: 10px;
+            padding:15px;
+            flex-shrink: 0;
+            border-radius: 45px;
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24), 0 5px 12px 0 rgba(0,0,0,0.19);
+        }
+        .albums{
+            border-radius: 45px 45px 15px 15px ;
+            padding: 15px;
+            padding-left: 20px;
+            height:auto;
+            width:97%;
+            background: linear-gradient(#FBFCE8,#FAEBD7);
+            margin-top: 10px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24), 0 5px 12px 0 rgba(0,0,0,0.19);
+        }
+        
+        .address{
+            margin-bottom: 5px;
+        }
+        .name{
+            margin-bottom: 5px;
+        }
+        .bs{
+            margin-bottom: 5px;
+        }
+        .catchPhrase{
+            margin-bottom: 5px;
+        }
+        .companyName{
+            margin-bottom: 5px;
+        }
+        .email{
+            margin-bottom: 5px;
+        }
+        .id{
+            margin-bottom: 5px;
+        }
+        .name{
+            margin-bottom: 5px;
+        }
+        .phone{
+            margin-bottom: 5px;
+        }
+        .username{
+            font-weight: bold;
+            text-decoration: underline;
+            margin-bottom: 1px;
+        }
+        .website{
+            
+        }
+        .post{
+            display:flex;
+            flex-direction: column;
+            flex:auto;
+            background: linear-gradient(to left,#ffe4c4,#FFF5D5);
+
+            height:auto;
+            flex-shrink: 0;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24);
+            
+        }
+        .title{
+            font-size:20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .body{
+            font-size:15px;
+        }
+        .showAll{
+            margin: 5px;
+        }
+        #postButton,#albumButton{
+            border:none;
+            background:none;
+            color:blue;
+            float:right;
+            cursor: pointer;
+        }
+        
+        #postButton:hover,#albumButton:hover{
+            text-decoration: underline;
+            color:#4444FF;
+        }
+        .album{
+            height:auto;
+            width:auto;
+            background-color: none;
+            margin-top: 5px;
+            padding:10px;
+        }
+        .albumId{
+            visibility: hidden;
+        }
+        .albumTitle{
+            color:blue;
+            font-size: 20px;
+            cursor: pointer;
+
+        }
+        .albumTitle:hover{
+                        text-decoration: underline;
+            color:#4444FF;
+        }
+        
+        .buttons{
+            position: none;
+            cursor: pointer;
+            float: left;
+            width: 6%;
+            text-align: center;
+            background-color: #4C7D55;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            padding: 8px 16px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 12px;
+            margin-left: 10px;
+            bottom: 10px;
+            display: inline-block;
+            font-weight: bold;
+            transition-duration: 0.3s;
+        }
+        
+        .superDiv {
+            display: flex;
+            width: 100%;
+        }
+  .ulo {
+      
+  position: relative;
+  width: 30%;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.patong {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 100%;
+  background-color: #D0E8DE;
+  overflow: hidden;
+  width: 0;
+  height: 100%;
+  transition: .5s ease;
+}
+
+.ulo:hover .patong {
+  width: 100%;
+  right: 0;
+}
+
+.text {
+  white-space: nowrap; 
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  overflow: hidden;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+    </style>
+    
+    
+    
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js" ></script>
+    <script>
+        var root = "https://jsonplaceholder.typicode.com";
+        var userId = -1;
+        var allPosts = false;
+        var allAlbums = false;
+        $(document).ready(function(){
+            var query = window.location.search.substring(1);
+            userId = query.split("=")[1];
+            
+            $(document).ready(function(){
+                if(userId!=-1){
+                    init();
+                }
+            })
+            
+            function init(){
+                addProfile();
+                
+                $.get(root + "/posts" + "?userId=" + userId, function(obj){
+                    var jason = obj[obj.length-1];
+                    $(".title").html(jason.title);
+                    $(".body").html(jason.body);
+                });
+                $.get(root + "/albums" + "?userId=" + userId, function(obj){
+                    var jason = obj[obj.length-1];
+                    $(".albumTitle").html(jason.title);
+                    $(".albumId").html(jason.id);
+                });
+            }
+            function addProfile(){
+                $.get(root + "/users" + "?id=" + userId, function(obj){
+                    var jason = obj[0];
+                    var add = jason.address.city + ", " + jason.address.street + ", " + jason.address.suite + ", " + jason.address.zipcode;
+                    $(".username").html(jason.username);
+                    $(".name").html(jason.name);
+                    $(".phone").html(jason.phone);
+                    $(".email").html(jason.email);
+                    $(".website").html(jason.website);
+                    $(".companyName").html(jason.company.name);
+                    $(".catchPhrase").html(jason.company.catchPhrase);
+                    $(".bs").html(jason.company.bs);
+                    $(".address").html(add);
+                });
+            }
+            function showAllPosts(){
+                console.log("pres");
+                $.get(root + "/posts" + "?userId=" + userId, function(obj){
+                    for(var i = obj.length - 2; i >= 0; i--){
+                        
+                        allPosts = true;
+                        
+                        var jason = obj[i];
+                        var newPost = $("<div>");
+                        newPost.addClass("post");
+
+                        var title = $("<div>");
+                        title.addClass("title");
+
+                        var body = $("<div>");
+                        body.addClass("body");
+
+                        title.html(jason.title);
+                        body.html(jason.body);
+
+                        newPost.append(title);
+                        newPost.append(body);
+
+                        $(".posts").append(newPost);
+                    }
+                });
+            }
+            
+            function showAllAlbums(obj){
+                allAlbums = true;
+                $.get(root + "/albums" + "?userId=" + userId, function(obj){
+                    for(var i = obj.length - 2; i >= 0; i--){
+                        var jason = obj[i];
+                        
+                        var newAlbum = $("<div>");
+                        newAlbum.addClass("album");
+                        
+                        var newTitle = $("<div>");
+                        newTitle.addClass("albumTitle");
+                        
+                        var newId = $("<div>");
+                        newId.addClass("albumId");
+                        
+                        newTitle.html(jason.title);
+                        newId.html(jason.id);
+                        
+                        newAlbum.append(newTitle);
+                        newAlbum.append(newId);
+                        
+                        $(".albums").append(newAlbum);
+                        
+                    }
+                    
+                });
+                
+            }
+            $("#postButton").click(function(){
+                if(!allPosts){
+                    showAllPosts();
+                }else{
+                    alert("Already showing all posts by this user!");
+                }
+            });
+            
+            $("#albumButton").click(function(){
+                if(!allAlbums){
+                    showAllAlbums();
+                }else{
+                    alert("Already showing all albums by this user!");
+                }
+            });
+        }); 
+    
+            
+       $(document).on('click', ".albumTitle", function(){
+            var obj = $(this).parent().find(".albumId").text();
+            var title = $(this).text();
+            window.open("album.html?id=" + obj + "?name=" + title);
+        });
+        
+        
+    </script>
+    
+    <head>
+    
+    
+    </head>
+    
+    <body>
+        
+
+    <div class="superDiv">
+  
+    
+    <div class="ulo">
+      <a href="main.html">
+        <img src="warudo.png" class = "image" alt="avatar">
+        
+       
+    <div class="patong">
+        <img class="text" src="home.png" width="80%">
+
+    </div>
+          </a>
+        </div>
+         
+        <img src="profile.png" height="60px" style="position:absolute; margin-left:64%; margin-top: 15;">
+        </div>
+    <div class = "mainDiv">
+        
+        <div class = "profile">
+
+            <div class = "username"></div>
+            <div class = "name"></div>
+            <div class = "phone"></div>
+            <div class = "email"></div>
+            <div class = "website"></div>
+            <div class = "companyName"></div>
+            <div class = "catchPhrase"></div>
+            <div class = "bs"></div>
+            <div class = "address"></div>
+            
+        </div>
+        <div class = "posts">
+            RECENT POSTS
+            <div class = "post">
+                <div class = "title"></div>
+                <div class = "body"></div>
+            </div>
+        </div>
+        <div class = "showAll">
+            <button id = "postButton">View All</button>
+        </div>
+        <div class = "albums">
+            RECENT ALBUMS
+            <div class = "album">
+                <div class = "albumTitle"></div>
+                <div class = "albumId"></div>
+            </div>
+        
+        </div>
+        <div class = "showAll">
+            <button id = "albumButton">View All</button>
+        </div>
+        
+        
+    </div>
+    <button onclick = "location.href = 'main.html';" class = "buttons">Home</button>
+    
+    </body>
+    
+    
+    
+</html>
